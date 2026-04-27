@@ -1,9 +1,11 @@
 from pathlib import Path
 import shutil
+import random
+import os
 
 p = Path('./Proyecto/Utils/ArchivosPruebas')
 
-def crearBackup():
+def crearBackupInicial():
     path_bk = p / "BACKUP"
     path_or = p / "TESIS"
     path_bk.mkdir(exist_ok=True)
@@ -11,6 +13,18 @@ def crearBackup():
     for childFolder in path_or.iterdir():
         destino = path_bk / childFolder.name
         childFolder.copy(destino, preserve_metadata=True)
+
+def crearBackupContinua():
+    path_bk = p / "BACKUP"
+    path_or = p / "TESIS"
+# rsync
+    for childFolder in path_or.iterdir():
+        # print(childFolder.stat())
+        backupFolder = path_bk / childFolder.name
+        folderSizeComp = childFolder.stat().st_size == backupFolder.stat().st_size
+        print(f"La carpeta: {childFolder.name} Cambio?:{folderSizeComp}")
+
+
 
 def crearArbolInicial():
     # Arbol Tesis / 2020-2026
@@ -21,10 +35,19 @@ def crearArbolInicial():
         nueva_carpeta.mkdir(mode=0o777, parents=False,exist_ok=True)
 
 def crearArchivosBase():
+    # for i in range(2000,2027):
+    #     for j in range(1,150):
+    #         archivoParaCrear = p / "TESIS" / str(i) / f"Tesis_{i}_{j}.pdf"
+    #         archivoParaCrear.touch()
+
     for i in range(2000,2027):
         for j in range(1,150):
             archivoParaCrear = p / "TESIS" / str(i) / f"Tesis_{i}_{j}.pdf"
-            archivoParaCrear.touch()
+            
+            tamanio_kb = random.randint(89, 190)
+            tamanio_bytes = tamanio_kb * 1024
+            
+            archivoParaCrear.write_bytes(os.urandom(tamanio_bytes))
 
 # comparar carpetas 
 
@@ -49,4 +72,24 @@ crearArbolInicial()
 crearArchivosBase()
 contarArchivosArbol()
 compararCarpetas()
-crearBackup()
+
+
+
+path_bk = p / "BACKUP" / "2020"
+path_or = p / "TESIS" / "2020"
+# rsync
+for childFolder in path_or.iterdir():
+    # print(childFolder.stat())
+    backupFolder = path_bk / childFolder.name
+    
+    archivoParaModificar = path_bk / "Tesis_2020_130.pdf"
+    archivoParaModificar.write_bytes(os.urandom(20000))
+
+
+    folderSizeComp = childFolder.stat().st_size != backupFolder.stat().st_size
+    
+ 
+    # Comparar tamaño 2 archivos:
+    print(childFolder.stat().st_size)
+    print(backupFolder.stat().st_size)
+    print(f"La carpeta: {childFolder.name} Cambio?:{folderSizeComp}")

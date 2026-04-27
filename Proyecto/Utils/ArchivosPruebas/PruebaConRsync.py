@@ -1,30 +1,16 @@
 from pathlib import Path
-import shutil
+# Aleatorizar Tamaños
 import random
 import os
+# Rsync para Verificar
+import subprocess
+
 
 p = Path('./Proyecto/Utils/ArchivosPruebas')
 
-def crearBackupInicial():
-    path_bk = p / "BACKUP"
-    path_or = p / "TESIS"
-    path_bk.mkdir(exist_ok=True)
-
-    for childFolder in path_or.iterdir():
-        destino = path_bk / childFolder.name
-        childFolder.copy(destino, preserve_metadata=True)
-
-def crearBackupContinua():
-    path_bk = p / "BACKUP"
-    path_or = p / "TESIS"
-# rsync
-    for childFolder in path_or.iterdir():
-        # print(childFolder.stat())
-        backupFolder = path_bk / childFolder.name
-        folderSizeComp = childFolder.stat().st_size == backupFolder.stat().st_size
-        print(f"La carpeta: {childFolder.name} Cambio?:{folderSizeComp}")
-
-
+def crearBackup():
+    subprocess.run(['rsync', '-az', '--delete', './Proyecto/Utils/ArchivosPruebas/TESIS/', 
+                './Proyecto/Utils/ArchivosPruebas/BACKUP/'])
 
 def crearArbolInicial():
     # Arbol Tesis / 2020-2026
@@ -75,21 +61,21 @@ compararCarpetas()
 
 
 
-path_bk = p / "BACKUP" / "2020"
-path_or = p / "TESIS" / "2020"
-# rsync
-for childFolder in path_or.iterdir():
-    # print(childFolder.stat())
-    backupFolder = path_bk / childFolder.name
+# path_bk = p / "BACKUP" / "2020"
+# path_or = p / "TESIS" / "2020"
+# # rsync
+# for childFolder in path_or.iterdir():
+#     # print(childFolder.stat())
+#     backupFolder = path_bk / childFolder.name
     
-    archivoParaModificar = path_bk / "Tesis_2020_130.pdf"
-    archivoParaModificar.write_bytes(os.urandom(20000))
+#     archivoParaModificar = path_bk / "Tesis_2020_130.pdf"
+#     archivoParaModificar.write_bytes(os.urandom(20000))
 
 
-    folderSizeComp = childFolder.stat().st_size != backupFolder.stat().st_size
+#     folderSizeComp = childFolder.stat().st_size != backupFolder.stat().st_size
     
  
-    # Comparar tamaño 2 archivos:
-    print(childFolder.stat().st_size)
-    print(backupFolder.stat().st_size)
-    print(f"La carpeta: {childFolder.name} Cambio?:{folderSizeComp}")
+#     # Comparar tamaño 2 archivos:
+#     print(childFolder.stat().st_size)
+#     print(backupFolder.stat().st_size)
+#     print(f"La carpeta: {childFolder.name} Cambio?:{folderSizeComp}")

@@ -29,7 +29,7 @@ def crearArchivosBase():
     for i in range(2000,2027):
         for j in range(1,150):
             archivoParaCrear = p / "TESIS" / str(i) / f"Tesis_{i}_{j}.pdf"
-            
+
             tamanio_kb = random.randint(89, 190)
             tamanio_bytes = tamanio_kb * 1024
             
@@ -54,11 +54,13 @@ def contarArchivosArbol():
 # Extraer los datos de carpeta antes que de archivos
 # No es necesario contar archivo por archivo, con ver si una carpeta cambia basta
 
+# crearArbolInicial()
+# crearArchivosBase()
+# contarArchivosArbol()
+# compararCarpetas()
 crearArbolInicial()
 crearArchivosBase()
-contarArchivosArbol()
-compararCarpetas()
-
+crearBackup()
 
 
 # path_bk = p / "BACKUP" / "2020"

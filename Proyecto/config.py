@@ -7,5 +7,3 @@ PERMISOS_FILE = 0o755
 
 RANGO_CARPETAS = range(2000,2027)
 RANGO_ARCHIVOS = range(1,150)
-
-NOMBRE_PDF = f"Tesis{i}_{j}.pdf"

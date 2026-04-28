@@ -5,6 +5,7 @@ import random
 from config import *
 p = RUTA_BASE
 
+#Opciones Menu
 def mostrarMenu():
     print("\n=== MENÚ ===")
     print("1) Crear Carpetas")
@@ -28,27 +29,28 @@ def ejecutarAccion(accion):
     else:
         print("Opción invalida")
 
-def crearBackup():
-    subprocess.run(['rsync', '-az', '--delete', './Proyecto/Utils/ArchivosPruebas/TESIS/', 
-                './Proyecto/Utils/ArchivosPruebas/BACKUP/'])
+#Acciones a Realizar
 
 def crearCronBackup():
     pass
 
 def forzarBackup():
-    pass
+     subprocess.run(['rsync', '-azv', '--delete', './Proyecto/Utils/ArchivosPruebas/TESIS/', 
+                './Proyecto/Utils/ArchivosPruebas/BACKUP/'])
 
 def crearDirectoriosIniciales():
     carpeta_base = p / "TESIS"
     carpeta_base.mkdir(PERMISOS_DIR,parents=False,exist_ok=True)
-    for i in range(2000,2027):
+    
+    for i in RANGO_CARPETAS:
         nueva_carpeta = carpeta_base / str(i)
         nueva_carpeta.mkdir(mode=PERMISOS_DIR, parents=False,exist_ok=True)
 
 def crearArchivosBase():
+
     for i in RANGO_CARPETAS:
         for j in RANGO_ARCHIVOS:
-            archivoParaCrear = p / "TESIS" / str(i) / NOMBRE_PDF
+            archivoParaCrear = p / "TESIS" / str(i) / f"Tesis{i}_{j}.pdf"
             tamanio_kb = random.randint(89, 190)
             tamanio_bytes = tamanio_kb * 1024    
             archivoParaCrear.write_bytes(os.urandom(tamanio_bytes))

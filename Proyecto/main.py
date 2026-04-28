@@ -8,8 +8,8 @@ p = RUTA_BASE
 #Opciones Menu
 def mostrarMenu():
     print("\n=== MENÚ ===")
-    print("1) Crear Carpetas")
-    print("2) Generar Archivos")
+    print("1) Crear Estructura Inicial (Archivos y Carpetas)")
+    print("2) Forzar Backup")
     print("3) Eliminar Carpetas")
     print("4) Eliminar archivos")
     print("5) Salir")
@@ -17,10 +17,10 @@ def mostrarMenu():
 
 def ejecutarAccion(accion):
     acciones = {
-        1: crearDirectoriosIniciales,
-        2: crearArchivosBase,
+        1: crearEstructuraInicial,
+        2: forzarBackup,
         3: crearCronBackup,
-        4: forzarBackup
+        4: eliminarEstructuras
     }
 
     if accion in acciones:
@@ -32,6 +32,9 @@ def ejecutarAccion(accion):
 #Acciones a Realizar
 
 def crearCronBackup():
+    pass
+
+def eliminarEstructuras():
     pass
 
 def forzarBackup():
@@ -55,17 +58,21 @@ def crearArchivosBase():
             tamanio_bytes = tamanio_kb * 1024    
             archivoParaCrear.write_bytes(os.urandom(tamanio_bytes))
 
-def eliminarArchivosEmergentes():
-    for i in range(1,10):
-        for j in range(1,10):
-            archivo = p / str (i) / f"Tesis{j}.pdf"
-            archivo.unlink(missing_ok=True)
+def crearEstructuraInicial():
+    crearDirectoriosIniciales()
+    crearArchivosBase()
+    
+# def eliminarArchivosEmergentes():
+#     for i in range(1,10):
+#         for j in range(1,10):
+#             archivo = p / str (i) / f"Tesis{j}.pdf"
+#             archivo.unlink(missing_ok=True)
 
-            archivo = p / str (i) / f"{j}.txt"
-            archivo.unlink(missing_ok=True)
+#             archivo = p / str (i) / f"{j}.txt"
+#             archivo.unlink(missing_ok=True)
 
-            archivo = p / str (i) / f"{j}"
-            archivo.unlink(missing_ok=True)
+#             archivo = p / str (i) / f"{j}"
+#             archivo.unlink(missing_ok=True)
     # Eliminar archivos por nombre
     # Carpetas por nombres 
 

@@ -41,7 +41,7 @@ def forzarBackup():
      subprocess.run(['rsync', '-azv', '--delete', './Proyecto/Utils/ArchivosPruebas/TESIS/', 
                 './Proyecto/Utils/ArchivosPruebas/BACKUP/'])
 
-def crearDirectoriosIniciales():
+def crearEstructuraInicial():
     carpeta_base = p / "TESIS"
     carpeta_base.mkdir(PERMISOS_DIR,parents=False,exist_ok=True)
     
@@ -49,19 +49,12 @@ def crearDirectoriosIniciales():
         nueva_carpeta = carpeta_base / str(i)
         nueva_carpeta.mkdir(mode=PERMISOS_DIR, parents=False,exist_ok=True)
 
-def crearArchivosBase():
-
-    for i in RANGO_CARPETAS:
         for j in RANGO_ARCHIVOS:
             archivoParaCrear = p / "TESIS" / str(i) / f"Tesis{i}_{j}.pdf"
             tamanio_kb = random.randint(89, 190)
             tamanio_bytes = tamanio_kb * 1024    
             archivoParaCrear.write_bytes(os.urandom(tamanio_bytes))
 
-def crearEstructuraInicial():
-    crearDirectoriosIniciales()
-    crearArchivosBase()
-    
 # def eliminarArchivosEmergentes():
 #     for i in range(1,10):
 #         for j in range(1,10):

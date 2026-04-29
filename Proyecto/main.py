@@ -30,9 +30,22 @@ def ejecutarAccion(accion):
         print("Opción invalida")
 
 #Acciones a Realizar
+def crearCronBackup(schedule = SCHEDULE, command = SYNC_COMMAND):
+    resultado = subprocess.run(["crontab","-1"],capture_output=True,text=True)
+    archivoActual = resultado.stdout if resultado.returncode == 0 else ""
 
-def crearCronBackup():
-    pass
+    nuevoCronJob= f"{schedule} {command}\n"
+
+    if nuevoCronJob in archivoActual:
+        print("La tarea ya fue implementada en el sistema.")
+        return
+    
+    nuevoCronTab = archivoActual + nuevoCronJob
+    subprocess.run(["crontab","-"], input=nuevoCronTab, text=True,check=True)
+    print(f"Tarea Creada: {nuevoCronJob.strip()}")
+
+
+
 
 def eliminarEstructuras():
     pass
@@ -42,33 +55,20 @@ def forzarBackup():
                 './Proyecto/Utils/ArchivosPruebas/BACKUP/'])
 
 def crearEstructuraInicial():
+    # Carpeta base Tesis creada
     carpeta_base = p / "TESIS"
     carpeta_base.mkdir(PERMISOS_DIR,parents=False,exist_ok=True)
     
+    # Rango de carpetas por años creada
     for i in RANGO_CARPETAS:
         nueva_carpeta = carpeta_base / str(i)
         nueva_carpeta.mkdir(mode=PERMISOS_DIR, parents=False,exist_ok=True)
 
         for j in RANGO_ARCHIVOS:
-            archivoParaCrear = p / "TESIS" / str(i) / f"Tesis{i}_{j}.pdf"
+            archivoParaCrear = nueva_carpeta / f"Tesis{i}_{j}.pdf"
             tamanio_kb = random.randint(89, 190)
             tamanio_bytes = tamanio_kb * 1024    
             archivoParaCrear.write_bytes(os.urandom(tamanio_bytes))
-
-# def eliminarArchivosEmergentes():
-#     for i in range(1,10):
-#         for j in range(1,10):
-#             archivo = p / str (i) / f"Tesis{j}.pdf"
-#             archivo.unlink(missing_ok=True)
-
-#             archivo = p / str (i) / f"{j}.txt"
-#             archivo.unlink(missing_ok=True)
-
-#             archivo = p / str (i) / f"{j}"
-#             archivo.unlink(missing_ok=True)
-    # Eliminar archivos por nombre
-    # Carpetas por nombres 
-
 
 if __name__ == "__main__":
     while True:
